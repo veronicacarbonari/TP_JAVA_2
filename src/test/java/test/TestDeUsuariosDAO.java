@@ -4,8 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import clasesSistemaTuristico.Atraccion;
+import clasesSistemaTuristico.Producto;
 import clasesSistemaTuristico.TipoDeAtraccion;
 import clasesSistemaTuristico.Usuario;
+import dao.AtraccionesDAOImpl;
 import dao.DAOFactory;
 import dao.UsuariosDAOImpl;
 

@@ -36,7 +36,7 @@ public class TestDeAtraccionesDAO {
 
 	@Test
 	public void insertDeleteTest() throws Exception {
-		Producto a1 = new Atraccion("playa", 15, 15, 15, TipoDeAtraccion.AVENTURA);
+		Producto a1 = new Atraccion("p", 15, 15, 15, TipoDeAtraccion.AVENTURA);
 
 		aDao.insert((Atraccion) a1);
 		assertEquals(9, aDao.countAll());
@@ -52,14 +52,5 @@ public class TestDeAtraccionesDAO {
 		Producto a1 = new Atraccion("Mordor", 15, 16, 15, TipoDeAtraccion.AVENTURA);
 
 		assertEquals(a1.getNombre(), aDao.findByAtraccion("Mordor").getNombre());
-	}
-	
-	@Test
-	public void setCosto() throws Exception {
-		Producto a1 = new Atraccion("Mordor", 15, 16, 15, TipoDeAtraccion.AVENTURA);
-		assertEquals(16, a1.getCosto());
-	
-		
-
 	}
 }
