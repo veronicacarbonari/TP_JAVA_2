@@ -20,8 +20,12 @@ public class Usuario {
 		this.tiempoDisponible = tiempoDisponible;
 		this.nombre = nombre;
 		this.tipoDeAtraccionPreferida = tipoDeAtraccionPreferida;
-		this.itinerario = new Itinerario(this);
 		
+		if (itinerarioDao.existe(this)) {
+			this.itinerario = itinerarioDao.findItinerarioByUser(this);
+		} else {
+			this.itinerario = new Itinerario();
+		}
 		
 		if (presupuesto <= 0) {
 			System.out.println("El usuario " + this.getNombre() + " NO posee dinero suficiente. \n");
@@ -32,15 +36,8 @@ public class Usuario {
 			System.out.println("El usuario " + this.getNombre() + " NO posee tiempo suficiente. \n");
 
 		}
-		
-//ESTO NO ANDA
-		/*
-		 * if (itinerarioDao.existe(this)) { this.itinerario =
-		 * itinerarioDao.findItinerarioByUsername(this.getNombre()); } else {
-		 * this.itinerario = new Itinerario(this); }
-		 */
 	}
-
+		
 	public int getPresupuesto() {
 		return this.presupuesto;
 	}
@@ -53,7 +50,6 @@ public class Usuario {
 		return this.tipoDeAtraccionPreferida;
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	public int getIdTipoAtraccion() {
 		int rta;
 		if (getTipo().equals("AVENTURA")) {

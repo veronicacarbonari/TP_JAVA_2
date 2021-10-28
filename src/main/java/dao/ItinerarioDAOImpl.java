@@ -40,7 +40,7 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 				statement.setInt(2, 1);
 				statement.setInt(3, idAtraccion);
 			}
-			
+
 			int rows = statement.executeUpdate();
 
 			return rows;
@@ -50,9 +50,10 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 		}
 	}
 
-	public int delete(Itinerario itinerario) {
+	public int delete(Usuario user) {
 		try {
-			int id = usuarioDao.findIdByNombreUsuario(itinerario.usuario.getNombre());
+
+			int id = usuarioDao.findIdByNombreUsuario(user.getNombre());
 			String sql = "DELETE FROM ITINERARIO WHERE id_usuario = ?";
 			Connection conn = ConnectionProvider.getConnection();
 
@@ -67,9 +68,9 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 		}
 	}
 
-	public Itinerario findItinerarioByUsername(String nombreUsuario) {
+	public Itinerario findItinerarioByUser(Usuario user) {
 		try {
-			int id = usuarioDao.findIdByNombreUsuario(nombreUsuario);
+			int id = usuarioDao.findIdByNombreUsuario(user.getNombre());
 
 			String sql = "SELECT * FROM ITINERARIO WHERE id_usuario = ?";
 			Connection conn = ConnectionProvider.getConnection();
@@ -77,43 +78,91 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 			statement.setInt(1, id);
 			ResultSet resultados = statement.executeQuery();
 
-			
-			Itinerario itinerario = new Itinerario();
+			ArrayList<Producto> atracciones = findAtraccionesItinerarioByUser(user);
+			ArrayList<Producto> promos = findPromosItinerarioByUser(user);
 
-			if (resultados.next()) {
-				if (resultados.getInt(3) == 1) {
-					System.out.println(atraccionDao.toAtraccion(resultados));
-					itinerario.productos.add(atraccionDao.toAtraccion(resultados));
-				} else {
-					itinerario.productos.add(promoDao.toPromocion(resultados));
-
-				}
-
-			}
-
-			return itinerario;
+			ArrayList<Producto> productos = new ArrayList<Producto>();
+			productos.addAll(atracciones);
+			productos.addAll(promos);
+			System.out.println(productos);
+			return toItinerario(productos);
 
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
 
-	public Itinerario toItinerario(ResultSet resultados) throws Exception {
-		Usuario user = usuarioDao.findById(resultados.getInt(2));
-		return new Itinerario(user);
+	public ArrayList<Producto> findAtraccionesItinerarioByUser(Usuario user) {
+
+		try {
+			int id = usuarioDao.findIdByNombreUsuario(user.getNombre());
+
+			String sql = "SELECT nombre, cupo, costo, tiempo, TIPODEATRACCION.tipo_atraccion  FROM ITINERARIO JOIN ATRACCIONES JOIN TIPODEATRACCION  WHERE ITINERARIO.id_tipo_producto = ATRACCIONES.id_tipo_producto AND ITINERARIO.id_item = ATRACCIONES.id_atraccion AND ATRACCIONES.id_tipo_atraccion = TIPODEATRACCION.id_tipo_atraccion AND ITINERARIO.id_usuario = ?";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, id);
+			ResultSet resultados = statement.executeQuery();
+			ArrayList<Producto> atracciones = new ArrayList<Producto>();
+
+			if (resultados.next()) {
+
+				atracciones.add(atraccionDao.toProductoAtraccion(resultados));
+
+			}
+
+			return atracciones;
+
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+
+	}
+
+	public ArrayList<Producto> findPromosItinerarioByUser(Usuario user) {
+
+		try {
+			int id = usuarioDao.findIdByNombreUsuario(user.getNombre());
+
+			String sql = "SELECT PROMOCIONES.id_promo, PROMOCIONES.id_tipo_producto, PROMOCIONES.tipo_promo, PROMOCIONES.nombre, PROMOCIONES.id_tipo_atraccion, PROMOCIONES.descuento, PROMOCIONES.precio  FROM PROMOCIONES JOIN ITINERARIO  WHERE ITINERARIO.id_tipo_producto = PROMOCIONES.id_tipo_producto AND ITINERARIO.id_item = PROMOCIONES.id_promo AND ITINERARIO.id_usuario = ?";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, id);
+			ResultSet resultados = statement.executeQuery();
+			ArrayList<Producto> promos = new ArrayList<Producto>();
+
+			if (resultados.next()) {
+
+				promos.add(promoDao.toPromocion(resultados));
+
+			}
+
+			return promos;
+
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+
+	}
+
+	public Itinerario toItinerario(ArrayList<Producto> p) throws Exception {
+		Itinerario itinerario = new Itinerario(p);
+		return itinerario;
 
 	}
 
 	public List<Itinerario> findAll() {
 		try {
-			String sql = "SELECT * FROM ITINERARIO";
+			String sql = "SELECT distinct id_usuario FROM ITINERARIO";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet resultados = statement.executeQuery();
 
 			List<Itinerario> itinerarios = new ArrayList<Itinerario>();
 			while (resultados.next()) {
-				itinerarios.add(toItinerario(resultados));
+				Usuario user = usuarioDao.findById(resultados.getInt(1));
+
+				itinerarios.add(findItinerarioByUser(user));
+
 			}
 
 			return itinerarios;
@@ -141,26 +190,28 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 			throw new MissingDataException(e);
 		}
 	}
-	
+
 	public boolean existe(Usuario user) {
 		try {
-		boolean rta = false;
-		int id = usuarioDao.findIdByNombreUsuario(user.getNombre());
-			String sql = "SELECT count(*) AS TOTAL FROM ITINERARIO where id_usuario = ?";
+			boolean rta;
+			int id = usuarioDao.findIdByNombreUsuario(user.getNombre());
+			String sql = "SELECT *  FROM ITINERARIO where id_usuario = ?;";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet resultados = statement.executeQuery();
 
-			
-			if (resultados.next()) {
+			if (!resultados.next()) {
+				rta = false;
+			} else {
 				rta = true;
 			}
-
 			return rta;
+
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
+
 	}
 
 	public int update(Itinerario t) {
@@ -169,6 +220,11 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 	}
 
 	public int insert(Itinerario t) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int delete(Itinerario t) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

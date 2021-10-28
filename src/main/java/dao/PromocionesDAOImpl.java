@@ -16,7 +16,7 @@ public class PromocionesDAOImpl implements PromocionesDAO {
 
 	private ArrayList<Atraccion> atracciones = new ArrayList<Atraccion>();
 	private ArrayList<Promocion> promociones = new ArrayList<Promocion>();
-	
+
 	public ArrayList<Promocion> findAll() {
 
 		try {
@@ -25,13 +25,12 @@ public class PromocionesDAOImpl implements PromocionesDAO {
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet resultados = statement.executeQuery();
 
-		
 			while (resultados.next()) {
-				
+
 				promociones.add(toPromocion(resultados));
-			
+
 			}
-			
+
 			return promociones;
 		} catch (Exception e) {
 			throw new MissingDataException(e);
@@ -91,7 +90,7 @@ public class PromocionesDAOImpl implements PromocionesDAO {
 
 			while (results.next()) {
 				a.add(AtraccionDao.toAtraccion(results));
-				
+
 			}
 		} catch (Exception e) {
 			throw new MissingDataException(e);
@@ -108,49 +107,47 @@ public class PromocionesDAOImpl implements PromocionesDAO {
 		try {
 
 			if (resultados.getString(3).equals("PromocionAxB")) {
-				
+
 				String sql = "select A.nombre, A.cupo, A.costo, A.tiempo, TA.tipo_atraccion from PROMOCIONES as P "
 						+ "JOIN TIPODEATRACCION AS TA ON TA.id_tipo_atraccion = a.id_tipo_atraccion "
 						+ "JOIN ATRACCIONES_DE_PROMOS AS PA ON PA.id_promo = P.id_promo "
 						+ "JOIN ATRACCIONES AS A ON PA.id_atraccion = a.id_atraccion "
 						+ "WHERE P.tipo_promo LIKE 'PromocionAxB';";
-				
+
 				ArrayList<Atraccion> a = findAtraccionesDePromocion(sql);
-			
-				
+
 				rta = new PromocionAxB(a, resultados.getString(4));
 
 			} else if (resultados.getString(3).equals("PromocionPorcentual")) {
-				
+
 				String sql = "select A.nombre, A.cupo, A.costo, A.tiempo, TA.tipo_atraccion from PROMOCIONES as P "
 						+ "JOIN TIPODEATRACCION AS TA ON TA.id_tipo_atraccion = a.id_tipo_atraccion "
 						+ "JOIN ATRACCIONES_DE_PROMOS AS PA ON PA.id_promo = P.id_promo "
 						+ "JOIN ATRACCIONES AS A ON PA.id_atraccion = a.id_atraccion "
 						+ "WHERE P.tipo_promo LIKE 'PromocionPorcentual';";
-				
+
 				ArrayList<Atraccion> a = findAtraccionesDePromocion(sql);
-				
+
 				rta1 = new PromocionPorcentual(a, resultados.getString(4), resultados.getInt(6));
 
 			} else if (resultados.getString(3).equals("PromocionAbsoluta")) {
-				//System.out.println("entró en absolut");
+				// System.out.println("entró en absolut");
 				String sql = "select A.nombre, A.cupo, A.costo, A.tiempo, TA.tipo_atraccion from PROMOCIONES as P "
 						+ "JOIN TIPODEATRACCION AS TA ON TA.id_tipo_atraccion = a.id_tipo_atraccion "
 						+ "JOIN ATRACCIONES_DE_PROMOS AS PA ON PA.id_promo = P.id_promo "
 						+ "JOIN ATRACCIONES AS A ON PA.id_atraccion = a.id_atraccion "
 						+ "WHERE P.tipo_promo LIKE 'PromocionAbsoluta';";
-				
+
 				ArrayList<Atraccion> a = findAtraccionesDePromocion(sql);
-			
-				
+
 				rta2 = new PromocionAbsoluta(a, resultados.getString(4), resultados.getInt(7));
 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	
-		return rta != null ? rta : rta1 != null ? rta1 : rta2; 
+
+		return rta != null ? rta : rta1 != null ? rta1 : rta2;
 
 	}
 
@@ -204,7 +201,6 @@ public class PromocionesDAOImpl implements PromocionesDAO {
 
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	public int insertPromoPorcentual(Promocion p) {
 		try {
 			String sql = "INSERT INTO PROMOCIONES (id_tipo_producto, tipo_promo, nombre, id_tipo_atraccion, descuento, precio) VALUES (?, ?, ?, ?, ?, ?)";
@@ -286,5 +282,4 @@ public class PromocionesDAOImpl implements PromocionesDAO {
 			throw new MissingDataException(e);
 		}
 	}
-
 }

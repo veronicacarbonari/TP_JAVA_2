@@ -1,11 +1,12 @@
 package dao;
 
-import java.sql.ResultSet;
-import clasesSistemaTuristico.Itinerario;
+import java.util.ArrayList;
 
+import clasesSistemaTuristico.Itinerario;
+import clasesSistemaTuristico.Producto;
 
 public interface ItinerarioDAO extends GenericDAO<Itinerario>  {
 
-	public abstract Itinerario toItinerario(ResultSet resultados) throws Exception;
-
+	public abstract Itinerario toItinerario(ArrayList<Producto> p) throws Exception;
+	
 }

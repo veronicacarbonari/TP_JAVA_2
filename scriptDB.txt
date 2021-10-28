@@ -1,59 +1,116 @@
-DROP TABLE IF EXISTS atracciones;
-CREATE TABLE atracciones (
+DROP TABLE IF EXISTS ATRACCIONES;
+CREATE TABLE "ATRACCIONES" (
 	"id_atraccion"	INTEGER NOT NULL,
-	"nombre"	TEXT NOT NULL,
+	"id_tipo_producto"	INTEGER NOT NULL,
+	"nombre"	TEXT NOT NULL UNIQUE,
 	"cupo"	INTEGER NOT NULL,
-	"visitantes"	INTEGER,
 	"costo"	INTEGER NOT NULL,
-	"duracion"	INTEGER NOT NULL,
-	"tipo"	INTEGER NOT NULL,
+	"tiempo"	REAL NOT NULL,
+	"id_tipo_atraccion"	INTEGER NOT NULL,
+	FOREIGN KEY("id_tipo_producto") REFERENCES "TIPOPRODUCTO"("id_tipo_producto"),
+	FOREIGN KEY("id_tipo_atraccion") REFERENCES "TIPODEATRACCION"("id_tipo_atraccion"),
+	FOREIGN KEY("id_atraccion") REFERENCES "ITINERARIO"("id_item"),
 	PRIMARY KEY("id_atraccion" AUTOINCREMENT)
 );
 
-DROP TABLE IF EXISTS itinerarios;
-CREATE TABLE itinerarios (
-	"nombre_usuario"	TEXT NOT NULL,
-	"costo_total"	INTEGER NOT NULL,
-	"duracion_total"	NUMERIC NOT NULL,
-	"atracciones"	INTEGER NOT NULL
-	
+INSERT INTO ATRACCIONES (id_tipo_producto, nombre, cupo, costo, tiempo, id_tipo_atraccion) VALUES 
+(1, "Moria", 6, 10, 2, 1),
+(1, "Minas Tirith", 25, 5, 2.5, 2),
+(1, "La Comarca", 150, 3, 6.5, 3),
+(1, "Mordor", 4, 25, 3, 1),
+(1, "Abismo de Helm", 15, 5, 2, 2),
+(1, "Lothlórien", 30, 35, 1, 3),
+(1, "Erebor", 32, 12, 3, 2),
+(1, "Bosque Negro", 12, 3, 4, 1);
+
+
+DROP TABLE IF EXISTS ATRACCIONES_DE_PROMOS;
+CREATE TABLE "ATRACCIONES_DE_PROMOS" (
+	"id_promo"	INTEGER NOT NULL,
+	"id_atraccion"	INTEGER NOT NULL,
+	FOREIGN KEY("id_atraccion") REFERENCES "ATRACCIONES"("id_atraccion")
 );
 
-DROP TABLE IF EXISTS tipo_atracciones;
-CREATE TABLE tipo_atracciones (
-	"id_tipo"	INTEGER NOT NULL,
-	"tipo"	TEXT NOT NULL,
-	PRIMARY KEY("id_tipo")
-);
+INSERT INTO ATRACCIONES_DE_PROMOS (id_promo, id_atraccion) VALUES
+(2, 6),
+(2, 3),
+(3, 2),
+(3, 5),
+(3, 7),
+(1, 4),
+(1, 8);
 
-DROP TABLE IF EXISTS usuarios;
-CREATE TABLE usuarios (
+DROP TABLE IF EXISTS ITINERARIO;
+CREATE TABLE "ITINERARIO" (
+	"id_itinerario"	INTEGER NOT NULL,
 	"id_usuario"	INTEGER NOT NULL,
-	"nombre"	TEXT NOT NULL,
-	"tipo_preferencia"	TEXT NOT NULL,
-	"tiempo"	NUMERIC NOT NULL,
-	"presupuesto"	INTEGER NOT NULL,
-	PRIMARY KEY("id_usuario" AUTOINCREMENT)
+	"id_tipo_producto"	INTEGER NOT NULL,
+	"id_item"	INTEGER NOT NULL,
+	FOREIGN KEY("id_tipo_producto") REFERENCES "TIPOPRODUCTO"("id_tipo_producto"),
+	FOREIGN KEY("id_usuario") REFERENCES "USUARIO"("id_usuario"),
+	PRIMARY KEY("id_itinerario" AUTOINCREMENT)
 );
 
 
-INSERT INTO usuarios (nombre, tipo_preferencia, tiempo, presupuesto) VALUES 
-("Eowyn", "AVENTURA", 8.0, 10),
-("Gandalf", "PAISAJE", 5.0, 100),
-("Sam", "DEGUSTACION", 8.0, 36),
-("Galadriel", "AVENTURA", 6.0, 120);
+DROP TABLE IF EXISTS PROMOCIONES;
+CREATE TABLE "PROMOCIONES" (
+	"id_promo"	INTEGER NOT NULL,
+	"id_tipo_producto"	INTEGER NOT NULL,
+	"tipo_promo"	TEXT NOT NULL,
+	"nombre"	TEXT NOT NULL,
+	"id_tipo_atraccion"	INTEGER NOT NULL,
+	"descuento"	INTEGER,
+	"precio"	INTEGER,
+	FOREIGN KEY("id_tipo_atraccion") REFERENCES "TIPODEATRACCION"("id_tipo_atraccion"),
+	FOREIGN KEY("id_promo") REFERENCES "ITINERARIO"("id_item"),
+	FOREIGN KEY("id_tipo_producto") REFERENCES "TIPOPRODUCTO"("id_tipo_producto"),
+	PRIMARY KEY("id_promo")
+);
 
-INSERT INTO atracciones (costo, duracion, tipo, cupo, nombre) VALUES 
-(10, 2, "AVENTURA", 6, "Moria"),
-(5, 2.5, "PAISAJE", 25, "Minas Tirith"),
-(3, 6.5, "DEGUSTACION", 150, "La Comarca"),
-(25, 3, "AVENTURA", 4, "Mordor"),
-(5, 2, "PAISAJE", 15, "Abismo de Helm"),
-(35, 1, "DEGUSTACION", 30, "Lothlórien"),
-(12, 3, "PAISAJE", 32, "Erebor"),
-(3, 4, "AVENTURA", 12, "Bosque Negro");
+INSERT INTO PROMOCIONES (id_tipo_producto, tipo_promo, nombre, id_tipo_atraccion, descuento, precio) VALUES
+(2, "PromocionPorcentual", "PackAventura", 1, 20, 0),
+(2, "PromocionAbsoluta", "PackDegustacion", 2, 0, 36),
+(2, "PromocionAxB", "PackPaisaje", 3, 0, 0);
 
-INSERT INTO tipo_atracciones (tipo) VALUES
+
+DROP TABLE IF EXISTS TIPODEATRACCION;
+CREATE TABLE "TIPODEATRACCION" (
+	"id_tipo_atraccion"	INTEGER NOT NULL,
+	"tipo_atraccion"	TEXT NOT NULL,
+	PRIMARY KEY("id_tipo_atraccion" AUTOINCREMENT)
+);
+
+INSERT INTO TIPODEATRACCION (tipo_atraccion) VALUES
 ("AVENTURA"),
 ("PAISAJE"),
-("DEGUSTACION")
+("DEGUSTACION");
+
+
+DROP TABLE IF EXISTS TIPOPRODUCTO;
+CREATE TABLE "TIPOPRODUCTO" (
+	"id_tipo_producto"	INTEGER NOT NULL,
+	"tipo_producto"	TEXT NOT NULL,
+	PRIMARY KEY("id_tipo_producto" AUTOINCREMENT)
+);
+
+INSERT INTO TIPOPRODUCTO (tipo_producto) VALUES
+("ATRACCION"),
+("PROMOCION");
+
+
+DROP TABLE IF EXISTS USUARIO;
+CREATE TABLE "USUARIO" (
+	"id_usuario"	INTEGER NOT NULL,
+	"nombre"	TEXT NOT NULL,
+	"id_tipo_atraccion"	INTEGER NOT NULL,
+	"tiempo"	REAL NOT NULL,
+	"presupuesto"	INTEGER NOT NULL,
+	PRIMARY KEY("id_usuario" AUTOINCREMENT),
+	FOREIGN KEY("id_tipo_atraccion") REFERENCES "TIPODEATRACCION"("id_tipo_atraccion")
+);
+
+INSERT INTO USUARIO (nombre, id_tipo_atraccion, tiempo, presupuesto) VALUES 
+("Eowyn", 1, 8.0, 10),
+("Gandalf", 2, 5.0, 100),
+("Sam", 3, 8.0, 36),
+("Galadriel", 1, 6.0, 120);

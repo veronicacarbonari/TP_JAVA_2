@@ -5,14 +5,18 @@ import java.util.ArrayList;
 public class Itinerario {
 
 	public ArrayList<Producto> productos;
-	public Usuario usuario;
 
-	public Itinerario(Usuario usuario) {
-		this.usuario = usuario;
+	public Itinerario() {
+
 		this.productos = new ArrayList<Producto>();
 
 	}
 
+	public Itinerario(ArrayList<Producto> productos) {
+
+		this.productos = productos;
+
+	}
 
 	public ArrayList<Producto> getItinerario() {
 		return this.productos;

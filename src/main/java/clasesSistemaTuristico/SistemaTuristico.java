@@ -42,7 +42,7 @@ public class SistemaTuristico {
 					&& !usuario.itinerario.getItinerario().contains(productosPreferidos.get(i))
 					&& puedeComprar(usuario, productosPreferidos.get(i))
 					&& !productosPreferidos.get(i).estaEn(usuario.itinerario.getAtraccionesDeItinerario())) {
-				//System.out.println(productosPreferidos);
+				// System.out.println(productosPreferidos);
 				sugerirProducto(productosPreferidos.get(i));
 			}
 
@@ -52,23 +52,35 @@ public class SistemaTuristico {
 	}
 
 	public void sugerirProducto(Producto producto) {
-		if (usuario.getPresupuesto()>=producto.getCosto() || usuario.getTiempo()>=producto.getDuracion()) {
-			
+		if (usuario.getPresupuesto() >= producto.getCosto() || usuario.getTiempo() >= producto.getDuracion()) {
+
 			System.out.println("Hola " + usuario.getNombre() + ", bienvenido al sistema de compra.\n");
 			System.out.println("Podemos ofrecerte los siguientes productos: \n");
 		}
-		
-		System.out.println(productosPreferidos);
+
+		if (producto.esPromocion()) {
+			System.out.println("¿Desea comprar la promoción " + producto.getNombre()
+					+ " que incluye: ");
+			System.out.println(producto.getAtracciones());
+			System.out.println("por un precio de " + producto.getCosto() + " monedas y con una duración total de "
+					+ producto.getDuracion() + " horas?");
+		} else {
+			System.out.println(usuario.getNombre() + ": " + " ¿Desea comprar la atracción " + producto.getNombre());
+			System.out.println("por un precio de " + producto.getCosto() + " monedas y con una duración total de "
+					+ producto.getDuracion() + " horas?");
+		}
+
+//		System.out.println(productosPreferidos);
 //		System.out.println(usuario.getNombre() + " ¿Desea comprar la " + producto);
 //		System.out.println("\n¿Desea comprar la " + producto);
-		System.out.println("\n¿Desea comprar la promoción?");
+		//System.out.println("\n¿Desea comprar la promoción?");
 		Scanner sc = new Scanner(System.in);
 		String op;
 		do {
 			System.out.println("Escriba 'S' para comprar o 'N' para rechazar:");
 			op = sc.next().toUpperCase();
 		} while (!(op.equals("S") || op.equals("N")));
-		//System.out.println(op);
+		// System.out.println(op);
 		if (op.equals("S")) {
 			usuario.aceptar(producto);
 			actualizarDB(producto);
@@ -76,8 +88,8 @@ public class SistemaTuristico {
 			System.out.println("¡Gracias por tu compra!");
 		}
 		System.out.println("\n*******************************************************************");
-		
-	//	sc.close();
+
+		// sc.close();
 	}
 
 	public void sugerirNoPreferencias() {
@@ -114,5 +126,4 @@ public class SistemaTuristico {
 			this.PromocionDao.update((Promocion) producto);
 		}
 	}
-
 }

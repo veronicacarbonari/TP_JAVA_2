@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import clasesSistemaTuristico.Atraccion;
+import clasesSistemaTuristico.Producto;
 import clasesSistemaTuristico.TipoDeAtraccion;
 import jdbc.ConnectionProvider;
 
@@ -77,7 +78,7 @@ public class AtraccionesDAOImpl implements AtraccionesDAO {
 
 			List<Atraccion> atracciones = new ArrayList<Atraccion>();
 			while (resultados.next()) {
-				atracciones.add(toAtraccion(resultados));
+				atracciones.add((Atraccion) toAtraccion(resultados));
 			}
 
 			return atracciones;
@@ -97,7 +98,7 @@ public class AtraccionesDAOImpl implements AtraccionesDAO {
 			Atraccion atraccion = null;
 
 			if (resultados.next()) {
-				atraccion = toAtraccion(resultados);
+				atraccion = (Atraccion) toAtraccion(resultados);
 			}
 
 			return atraccion;
@@ -128,10 +129,15 @@ public class AtraccionesDAOImpl implements AtraccionesDAO {
 	}
 
 	public Atraccion toAtraccion(ResultSet resultados) throws Exception {
-		return new Atraccion(resultados.getString(1), resultados.getInt(2), resultados.getInt(3), resultados.getDouble(4),
-				TipoDeAtraccion.valueOf((String) resultados.getObject(5)));
+		return new Atraccion(resultados.getString(1), resultados.getInt(2), resultados.getInt(3),
+				resultados.getDouble(4), TipoDeAtraccion.valueOf((String) resultados.getObject(5)));
 	}
-	
+
+	public Producto toProductoAtraccion(ResultSet resultados) throws Exception {
+		return new Atraccion(resultados.getString(1), resultados.getInt(2), resultados.getInt(3),
+				resultados.getDouble(4), TipoDeAtraccion.valueOf((String) resultados.getObject(5)));
+	}
+
 	public int findIdByNombreAtraccion(String nombreAtraccion) {
 		try {
 			String sql = "SELECT id_atraccion FROM ATRACCIONES WHERE nombre = ?";
@@ -148,8 +154,4 @@ public class AtraccionesDAOImpl implements AtraccionesDAO {
 			throw new MissingDataException(e);
 		}
 	}
-	
-	
-	
-
 }

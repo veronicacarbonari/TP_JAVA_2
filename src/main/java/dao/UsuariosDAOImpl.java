@@ -42,7 +42,7 @@ public class UsuariosDAOImpl implements UsuariosDAO {
 			int rows = statement.executeUpdate();
 
 			return rows;
-			
+
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
@@ -58,7 +58,7 @@ public class UsuariosDAOImpl implements UsuariosDAO {
 			int rows = statement.executeUpdate();
 
 			return rows;
-			
+
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
@@ -66,8 +66,7 @@ public class UsuariosDAOImpl implements UsuariosDAO {
 
 	public List<Usuario> findAll() {
 		try {
-			String sql = "SELECT * FROM USUARIO AS U "
-					+ "JOIN TIPODEATRACCION AS TA "
+			String sql = "SELECT * FROM USUARIO AS U " + "JOIN TIPODEATRACCION AS TA "
 					+ "WHERE U.id_tipo_atraccion = TA.id_tipo_atraccion";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -83,11 +82,10 @@ public class UsuariosDAOImpl implements UsuariosDAO {
 			throw new MissingDataException(e);
 		}
 	}
-	
+
 	public Usuario findByUsername(String usuario) {
 		try {
-			String sql = "SELECT * FROM USUARIO \r\n"
-					+ "JOIN TIPODEATRACCION\r\n"
+			String sql = "SELECT * FROM USUARIO \r\n" + "JOIN TIPODEATRACCION\r\n"
 					+ "where TIPODEATRACCION.id_tipo_atraccion = USUARIO.id_tipo_atraccion  AND usuario.nombre = ?";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -101,16 +99,15 @@ public class UsuariosDAOImpl implements UsuariosDAO {
 			}
 
 			return user;
-			
+
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
-	
+
 	public Usuario findById(int id) {
 		try {
-			String sql = "SELECT * FROM USUARIO AS U "
-					+ "JOIN TIPODEATRACCION AS TA "
+			String sql = "SELECT * FROM USUARIO AS U " + "JOIN TIPODEATRACCION AS TA "
 					+ "WHERE U.id_tipo_atraccion = TA.id_tipo_atraccion AND usuario.id_usuario = ?";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -124,7 +121,7 @@ public class UsuariosDAOImpl implements UsuariosDAO {
 			}
 
 			return user;
-			
+
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
@@ -151,12 +148,12 @@ public class UsuariosDAOImpl implements UsuariosDAO {
 	}
 
 	public Usuario toUser(ResultSet resultados) throws Exception {
-	
-		return new Usuario(resultados.getString(2), TipoDeAtraccion.valueOf((String) resultados.getObject(7)), 
+
+		return new Usuario(resultados.getString(2), TipoDeAtraccion.valueOf((String) resultados.getObject(7)),
 				resultados.getDouble(4), resultados.getInt(5));
-			 
+
 	}
-	
+
 	public int findIdByNombreUsuario(String nombreUsuario) {
 		try {
 			String sql = "SELECT id_usuario FROM USUARIO WHERE nombre = ?";
@@ -173,5 +170,4 @@ public class UsuariosDAOImpl implements UsuariosDAO {
 			throw new MissingDataException(e);
 		}
 	}
-
 }

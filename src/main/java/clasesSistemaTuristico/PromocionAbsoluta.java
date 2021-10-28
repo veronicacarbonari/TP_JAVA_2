@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class PromocionAbsoluta extends Promocion {
 
-public int costoFijo;
+	public int costoFijo;
 
 	public PromocionAbsoluta(ArrayList<Atraccion> atracciones, String nombre, int costoFijo) {
 		super(atracciones, nombre);
@@ -20,9 +20,17 @@ public int costoFijo;
 		setCosto(costoFijo);
 	}
 
+	@Override
+	public void setCosto(int costo) {
+		if (costo <= 0) {
+			throw new Error("Costo inválido");
+		} else {
+			this.costo = costo;
+		}
+	}
 
 	public int getCostoFijo() {
-		
+
 		return this.costoFijo;
 	}
 }
