@@ -1,0 +1,59 @@
+DROP TABLE IF EXISTS atracciones;
+CREATE TABLE atracciones (
+	"id_atraccion"	INTEGER NOT NULL,
+	"nombre"	TEXT NOT NULL,
+	"cupo"	INTEGER NOT NULL,
+	"visitantes"	INTEGER,
+	"costo"	INTEGER NOT NULL,
+	"duracion"	INTEGER NOT NULL,
+	"tipo"	INTEGER NOT NULL,
+	PRIMARY KEY("id_atraccion" AUTOINCREMENT)
+);
+
+DROP TABLE IF EXISTS itinerarios;
+CREATE TABLE itinerarios (
+	"nombre_usuario"	TEXT NOT NULL,
+	"costo_total"	INTEGER NOT NULL,
+	"duracion_total"	NUMERIC NOT NULL,
+	"atracciones"	INTEGER NOT NULL
+	
+);
+
+DROP TABLE IF EXISTS tipo_atracciones;
+CREATE TABLE tipo_atracciones (
+	"id_tipo"	INTEGER NOT NULL,
+	"tipo"	TEXT NOT NULL,
+	PRIMARY KEY("id_tipo")
+);
+
+DROP TABLE IF EXISTS usuarios;
+CREATE TABLE usuarios (
+	"id_usuario"	INTEGER NOT NULL,
+	"nombre"	TEXT NOT NULL,
+	"tipo_preferencia"	TEXT NOT NULL,
+	"tiempo"	NUMERIC NOT NULL,
+	"presupuesto"	INTEGER NOT NULL,
+	PRIMARY KEY("id_usuario" AUTOINCREMENT)
+);
+
+
+INSERT INTO usuarios (nombre, tipo_preferencia, tiempo, presupuesto) VALUES 
+("Eowyn", "AVENTURA", 8.0, 10),
+("Gandalf", "PAISAJE", 5.0, 100),
+("Sam", "DEGUSTACION", 8.0, 36),
+("Galadriel", "AVENTURA", 6.0, 120);
+
+INSERT INTO atracciones (costo, duracion, tipo, cupo, nombre) VALUES 
+(10, 2, "AVENTURA", 6, "Moria"),
+(5, 2.5, "PAISAJE", 25, "Minas Tirith"),
+(3, 6.5, "DEGUSTACION", 150, "La Comarca"),
+(25, 3, "AVENTURA", 4, "Mordor"),
+(5, 2, "PAISAJE", 15, "Abismo de Helm"),
+(35, 1, "DEGUSTACION", 30, "Lothlórien"),
+(12, 3, "PAISAJE", 32, "Erebor"),
+(3, 4, "AVENTURA", 12, "Bosque Negro");
+
+INSERT INTO tipo_atracciones (tipo) VALUES
+("AVENTURA"),
+("PAISAJE"),
+("DEGUSTACION")
