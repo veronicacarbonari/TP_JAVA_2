@@ -67,10 +67,10 @@ public class Atraccion extends Producto {
 		return i;
 	}
 	
-	@Override
+	/*@Override
 	public String toString() {
 		return "\n" + this.getNombre();//Tipo: " + tipo + ". \nCosto: " + costo
 			//+ " monedas." + "\nDuración: " + duracion + " horas.\n";
 		
-	}
+	}*/
 }

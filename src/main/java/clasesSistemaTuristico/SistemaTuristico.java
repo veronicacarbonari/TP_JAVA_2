@@ -36,6 +36,9 @@ public class SistemaTuristico {
 	public void sugerirPreferencias() {
 		if (productosPreferidos.size() == 0)
 			sugerirNoPreferencias();
+		
+		System.out.println("Hola " + usuario.getNombre() + ", bienvenido al sistema de compra.\n");
+		System.out.println("Podemos ofrecerte los siguientes productos: \n");
 
 		for (int i = 0; i < productosPreferidos.size(); i++) {
 			if (!productosPreferidos.get(i).estaLleno()
@@ -52,22 +55,21 @@ public class SistemaTuristico {
 	}
 
 	public void sugerirProducto(Producto producto) {
-		if (usuario.getPresupuesto() >= producto.getCosto() || usuario.getTiempo() >= producto.getDuracion()) {
+		/*if (usuario.getPresupuesto() >= producto.getCosto() || usuario.getTiempo() >= producto.getDuracion()) {
 
 			System.out.println("Hola " + usuario.getNombre() + ", bienvenido al sistema de compra.\n");
 			System.out.println("Podemos ofrecerte los siguientes productos: \n");
-		}
+		}*/
 
 		if (producto.esPromocion()) {
-			System.out.println("¿Desea comprar la promoción " + producto.getNombre()
-					+ " que incluye: ");
+			System.out.println("Promoción disponible: " + producto.getNombre() + "\nIncluye: ");
 			System.out.println(producto.getAtracciones());
-			System.out.println("por un precio de " + producto.getCosto() + " monedas y con una duración total de "
-					+ producto.getDuracion() + " horas?");
+			System.out.println("\tPrecio de la promoción: " + producto.getCosto() + " monedas. \n\tDuración total: "
+					+ producto.getDuracion() + " horas.\n");
 		} else {
-			System.out.println(usuario.getNombre() + ": " + " ¿Desea comprar la atracción " + producto.getNombre());
-			System.out.println("por un precio de " + producto.getCosto() + " monedas y con una duración total de "
-					+ producto.getDuracion() + " horas?");
+			System.out.println("¿Desea comprar la atracción " + producto.getNombre() + "?");
+			System.out.println("\tPrecio: " + producto.getCosto() + " monedas. \n\tDuración: "
+					+ producto.getDuracion() + " horas.\n");
 		}
 
 //		System.out.println(productosPreferidos);
@@ -85,9 +87,9 @@ public class SistemaTuristico {
 			usuario.aceptar(producto);
 			actualizarDB(producto);
 			producto.agregarVisitantes(1);
-			System.out.println("¡Gracias por tu compra!");
+			System.out.println("¡Gracias por tu compra!. El producto será agregado a tu itinerario.");
 		}
-		System.out.println("\n*******************************************************************");
+		System.out.println("\n*********************************************************************");
 
 		// sc.close();
 	}

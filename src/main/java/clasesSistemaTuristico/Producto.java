@@ -79,7 +79,7 @@ public abstract class Producto {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + " llamada " + this.nombre + "? \nTipo: " + tipo + ". \nCosto: " + costo
-				+ " monedas." + "\nDuración: " + duracion + " horas.\n";
+		return "\t" + this.getClass().getSimpleName() + ": " + this.nombre + ".\n\tTipo: " + tipo + ". \n\tCosto: " + costo
+				+ " monedas." + "\n\tDuración: " + duracion + " horas.\n\n";
 	}
 }
