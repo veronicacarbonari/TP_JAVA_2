@@ -84,7 +84,7 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 			ArrayList<Producto> productos = new ArrayList<Producto>();
 			productos.addAll(atracciones);
 			productos.addAll(promos);
-			System.out.println(productos);
+			
 			return toItinerario(productos);
 
 		} catch (Exception e) {

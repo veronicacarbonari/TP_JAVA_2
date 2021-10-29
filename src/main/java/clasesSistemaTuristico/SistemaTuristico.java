@@ -36,9 +36,8 @@ public class SistemaTuristico {
 	public void sugerirPreferencias() {
 		if (productosPreferidos.size() == 0)
 			sugerirNoPreferencias();
-		
-		System.out.println("Hola " + usuario.getNombre() + ", bienvenido al sistema de compra.\n");
-		System.out.println("Podemos ofrecerte los siguientes productos: \n");
+			
+			System.out.println("Hola " + usuario.getNombre() + ", bienvenido al sistema de compra.\n");
 
 		for (int i = 0; i < productosPreferidos.size(); i++) {
 			if (!productosPreferidos.get(i).estaLleno()
@@ -46,36 +45,71 @@ public class SistemaTuristico {
 					&& puedeComprar(usuario, productosPreferidos.get(i))
 					&& !productosPreferidos.get(i).estaEn(usuario.itinerario.getAtraccionesDeItinerario())) {
 				// System.out.println(productosPreferidos);
+				System.out.println("Podemos ofrecerte el siguiente producto: \n");
 				sugerirProducto(productosPreferidos.get(i));
 			}
 
 			if (i == productosPreferidos.size() - 1)
 				sugerirNoPreferencias();
+
 		}
+
+		System.out.println("¿Desea imprimir su itinerario? 'S' para aceptar, 'N' para rechazar: \n");
+		String respuesta = " ";
+		Scanner leer = new Scanner(System.in);
+		respuesta = leer.nextLine().toUpperCase();
+
+		while (!respuesta.equals("S") && !respuesta.equals("N")) {
+			System.out.println("No se reconoce " + respuesta + " como una opción válida. Intente nuevamente: ");
+			respuesta = leer.nextLine().toUpperCase();
+		}
+
+		if (respuesta.contentEquals("S")) {
+			System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++");
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+
+			System.out.println("\n**** ITINERARIO ****");
+			System.out.println("Productos comprados: \n");
+			System.out.println(usuario.itinerario.getAtraccionesDeItinerario());
+		}
+
+		if (respuesta.contentEquals("S")) {
+			System.out.println("\tDuración total \t" + usuario.itinerario.calcularTiempoItinerario() + " horas.");
+			System.out.println("\tTotal a pagar \t" + usuario.itinerario.calcularCostoItinerario() + " monedas.");
+			//System.out.println("\tTotal ahorro \t" + iDao.totalAhorro(usuario) + " monedas.");
+			System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++++");
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+		}
+
+		System.out.println("\n*********************************************************************");
 	}
 
 	public void sugerirProducto(Producto producto) {
-		/*if (usuario.getPresupuesto() >= producto.getCosto() || usuario.getTiempo() >= producto.getDuracion()) {
-
-			System.out.println("Hola " + usuario.getNombre() + ", bienvenido al sistema de compra.\n");
-			System.out.println("Podemos ofrecerte los siguientes productos: \n");
-		}*/
+		/*
+		 * if (usuario.getPresupuesto() >= producto.getCosto() || usuario.getTiempo() >=
+		 * producto.getDuracion()) {
+		 * 
+		 * System.out.println("Hola " + usuario.getNombre() +
+		 * ", bienvenido al sistema de compra.\n");
+		 * System.out.println("Podemos ofrecerte los siguientes productos: \n"); }
+		 */
 
 		if (producto.esPromocion()) {
+			System.out.println("Tipo de promoción: " + producto.getClass().getSimpleName());
 			System.out.println("Promoción disponible: " + producto.getNombre() + "\nIncluye: ");
 			System.out.println(producto.getAtracciones());
 			System.out.println("\tPrecio de la promoción: " + producto.getCosto() + " monedas. \n\tDuración total: "
 					+ producto.getDuracion() + " horas.\n");
 		} else {
 			System.out.println("¿Desea comprar la atracción " + producto.getNombre() + "?");
-			System.out.println("\tPrecio: " + producto.getCosto() + " monedas. \n\tDuración: "
-					+ producto.getDuracion() + " horas.\n");
+			System.out.println("\tPrecio: " + producto.getCosto() + " monedas. \n\tDuración: " + producto.getDuracion()
+					+ " horas.\n");
 		}
 
 //		System.out.println(productosPreferidos);
 //		System.out.println(usuario.getNombre() + " ¿Desea comprar la " + producto);
 //		System.out.println("\n¿Desea comprar la " + producto);
-		//System.out.println("\n¿Desea comprar la promoción?");
+		// System.out.println("\n¿Desea comprar la promoción?");
 		Scanner sc = new Scanner(System.in);
 		String op;
 		do {

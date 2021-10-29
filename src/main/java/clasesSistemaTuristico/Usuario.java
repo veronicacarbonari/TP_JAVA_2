@@ -28,12 +28,12 @@ public class Usuario {
 		}
 		
 		if (presupuesto <= 0) {
-			System.out.println("El usuario " + this.getNombre() + " NO posee dinero suficiente. \n");
+			System.out.println("El usuario " + this.getNombre() + " NO posee dinero suficiente para comprar más productos. \n");
 			//throw new Exception("Datos de presupuesto y/o tiempo inválidos");			
 		}
 		
 		if(tiempoDisponible <= 0) {
-			System.out.println("El usuario " + this.getNombre() + " NO posee tiempo suficiente. \n");
+			System.out.println("El usuario " + this.getNombre() + " NO posee tiempo suficiente para comprar más productos. \n");
 
 		}
 	}

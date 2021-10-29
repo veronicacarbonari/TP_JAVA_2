@@ -33,7 +33,6 @@ public class App {
 
 		for (int i = 0; i < usuarios.size(); i++) {
 			new SistemaTuristico(productos, usuarios.get(i)).sugerirPreferencias();
-
 		}
 	}
 }
