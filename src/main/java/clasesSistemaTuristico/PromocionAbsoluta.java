@@ -30,7 +30,7 @@ public class PromocionAbsoluta extends Promocion {
 	}
 
 	public int getCostoFijo() {
-
+		
 		return this.costoFijo;
 	}
 }

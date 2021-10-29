@@ -58,6 +58,7 @@ public abstract class Producto {
 	public abstract boolean estaLleno();
 
 	protected abstract void setCosto(int costo);
+	
 
 	@Override
 	public int hashCode() {

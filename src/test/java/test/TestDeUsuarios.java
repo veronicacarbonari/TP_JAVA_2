@@ -4,6 +4,8 @@ import clasesSistemaTuristico.*;
 import dao.ItinerarioDAOImpl;
 import dao.UsuariosDAOImpl;
 
+import static org.junit.Assert.assertFalse;
+
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -58,13 +60,13 @@ public class TestDeUsuarios {
 		u.aceptar(p1);
 	}
 
-	@Test(expected = Exception.class)
+	@Test
 	public void valoresNegativosTest() throws Exception {
 		Usuario u2 = new Usuario("Leonardo", TipoDeAtraccion.ACUATICO, 10, -50);
-		u2.getPresupuesto();
+		assertFalse(u2.getPresupuesto()>0);
 	}
 
-	@Test(expected = Exception.class)
+	@Test
 	public void valoresNegativosTest2() throws Exception {
 		Usuario u2 = new Usuario("Maria", TipoDeAtraccion.AVENTURA, 70, -10);
 		u2.getTiempo();

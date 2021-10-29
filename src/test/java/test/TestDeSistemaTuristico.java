@@ -1,6 +1,9 @@
 package test;
 
 import clasesSistemaTuristico.*;
+
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -25,18 +28,25 @@ public class TestDeSistemaTuristico {
 		atracsAventura.add(d);
 
 		Promocion promoPaisaje = new PromocionAxB(atracsPaisaje, "promo axb");
-		Promocion promoAventura = new PromocionAbsoluta(atracsAventura, "promo absoluta", 95);
+		Promocion promoAventura = new PromocionAbsoluta(atracsAventura, "promo absoluta", 12);
 
 		productos.add(promoPaisaje);
+		productos.add(a);
+		productos.add(b);
 		productos.add(c);
+		productos.add(d);
+		productos.add(promoAventura);
 
-		Usuario u = new Usuario("Pedro", TipoDeAtraccion.ACUATICO, 15, 200);
+		Usuario u = new Usuario("Pedro", TipoDeAtraccion.AVENTURA, 150, 200);
 
 		SistemaTuristico sist = new SistemaTuristico(productos, u);
 
-		sist.sugerirPreferencias();
-		sist.ordenarLista(productos);
-		System.out.println(sist.puedeComprar(u, promoPaisaje));
-		sist.sugerirProducto(promoAventura);
+		assertEquals(promoAventura, sist.productosPreferidos.get(0));
+		assertEquals(promoPaisaje, sist.productosNoPreferidos.get(0));
+		assertEquals(a, sist.productosNoPreferidos.get(2));
+		assertEquals(u, sist.usuario);
+		assertEquals(u.getTipo(), sist.preferenciaUsuario);
+		
+		
 	}
 }

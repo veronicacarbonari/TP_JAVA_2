@@ -5,20 +5,21 @@ import java.util.ArrayList;
 public class Itinerario {
 
 	public ArrayList<Producto> productos;
+	
 
 	public Itinerario() {
-
+		
 		this.productos = new ArrayList<Producto>();
 
 	}
 
 	public Itinerario(ArrayList<Producto> productos) {
-
+		
 		this.productos = productos;
 
 	}
-
-	public ArrayList<Producto> getItinerario() {
+	
+	public ArrayList<Producto> getProductosItinerario() {
 		return this.productos;
 	}
 
@@ -49,4 +50,6 @@ public class Itinerario {
 		}
 		return suma;
 	}
+	
+
 }

@@ -1,6 +1,8 @@
 package clasesSistemaTuristico;
 
+import dao.DAOFactory;
 import dao.ItinerarioDAOImpl;
+import dao.UsuariosDAOImpl;
 
 public class Usuario {
 
@@ -10,34 +12,41 @@ public class Usuario {
 	String nombre;
 	public Itinerario itinerario;
 	ItinerarioDAOImpl itinerarioDao = new ItinerarioDAOImpl();
+	UsuariosDAOImpl uDao = DAOFactory.getUsuariosDao();
 
-	public Usuario(String nombre, TipoDeAtraccion tipoDeAtraccionPreferida, double tiempoDisponible, int presupuesto) {
-		// throws Exception {
+	public Usuario(String nombre, TipoDeAtraccion tipoDeAtraccionPreferida, double tiempoDisponible, int presupuesto)
+			throws Exception {
 		// if (presupuesto <= 0 || tiempoDisponible <= 0)
 		// throw new Exception("Datos de presupuesto y/o tiempo inválidos");
-
+	
 		this.presupuesto = presupuesto;
 		this.tiempoDisponible = tiempoDisponible;
 		this.nombre = nombre;
 		this.tipoDeAtraccionPreferida = tipoDeAtraccionPreferida;
-		
-		if (itinerarioDao.existe(this)) {
-			this.itinerario = itinerarioDao.findItinerarioByUser(this);
+
+		if (uDao.existe(this)) {
+			if (itinerarioDao.existe(this)) {
+				this.itinerario = itinerarioDao.findItinerarioByUser(this);
+			} else {
+				this.itinerario = new Itinerario();
+			}
 		} else {
 			this.itinerario = new Itinerario();
 		}
 		
 		if (presupuesto <= 0) {
-			System.out.println("El usuario " + this.getNombre() + " NO posee dinero suficiente para comprar más productos. \n");
-			//throw new Exception("Datos de presupuesto y/o tiempo inválidos");			
+			System.out.println(
+					"El usuario " + this.getNombre() + " NO posee dinero suficiente para comprar más productos. \n");
+			this.presupuesto = 0;
 		}
-		
-		if(tiempoDisponible <= 0) {
-			System.out.println("El usuario " + this.getNombre() + " NO posee tiempo suficiente para comprar más productos. \n");
 
+		if (tiempoDisponible <= 0) {
+			System.out.println(
+					"El usuario " + this.getNombre() + " NO posee tiempo suficiente para comprar más productos. \n");
+			this.tiempoDisponible = 0;
 		}
 	}
-		
+
 	public int getPresupuesto() {
 		return this.presupuesto;
 	}
@@ -52,9 +61,9 @@ public class Usuario {
 
 	public int getIdTipoAtraccion() {
 		int rta;
-		if (getTipo().equals("AVENTURA")) {
+		if (this.getTipo().equals("AVENTURA")) {
 			rta = 1;
-		} else if (getTipo().equals("PAISAJE")) {
+		} else if (this.getTipo().equals("PAISAJE")) {
 			rta = 2;
 		} else {
 			rta = 3;
@@ -66,8 +75,6 @@ public class Usuario {
 		this.setPresupuesto(this.getPresupuesto() - producto.getCosto());
 		this.setTiempo(this.getTiempo() - producto.getDuracion());
 		agregarAlItinerario(producto);
-		//System.out.println(itinerario.getAtraccionesDeItinerario());
-		//System.out.println(itinerario.getItinerario());
 
 	}
 
@@ -91,6 +98,18 @@ public class Usuario {
 
 	public void agregarAlItinerario(Producto producto) {
 		this.itinerario.productos.add(producto);
+	}
+
+	public Itinerario getItinerario() {
+		return this.itinerario;
+	}
+	
+	public int calcularAhorroDeItinerario() {
+		int suma=0;
+		for(Producto a : this.getItinerario().getAtraccionesDeItinerario()) {
+			suma += a.getCosto();
+		}
+		return suma - this.getItinerario().calcularCostoItinerario();
 	}
 
 }

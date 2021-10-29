@@ -25,7 +25,7 @@ public class PromocionPorcentual extends Promocion {
 	}
 
 	public int getPorcentaje() {
-
+		
 		return this.porcentajeDescuento;
 	}
 }

@@ -82,8 +82,8 @@ public class TestDeItinerarioDAO {
 		iDao.insert(carlos, promo);
 		Itinerario i = new Itinerario(prod);
 		System.out.println(iDao.findItinerarioByUser(carlos));
-		assertEquals(i.getItinerario().get(0).getNombre(),
-				iDao.findItinerarioByUser(carlos).getItinerario().get(0).getNombre());
+		assertEquals(i.getProductosItinerario().get(0).getNombre(),
+				iDao.findItinerarioByUser(carlos).getProductosItinerario().get(0).getNombre());
 
 		iDao.delete(carlos);
 		pDao.delete((Promocion) promo);

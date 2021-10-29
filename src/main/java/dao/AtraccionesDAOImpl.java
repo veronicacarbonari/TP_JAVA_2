@@ -129,15 +129,15 @@ public class AtraccionesDAOImpl implements AtraccionesDAO {
 	}
 
 	public Atraccion toAtraccion(ResultSet resultados) throws Exception {
-		return new Atraccion(resultados.getString(1), resultados.getInt(2), resultados.getInt(3),
-				resultados.getDouble(4), TipoDeAtraccion.valueOf((String) resultados.getObject(5)));
+		return new Atraccion(resultados.getString(1), resultados.getInt(2), resultados.getInt(3), resultados.getDouble(4),
+				TipoDeAtraccion.valueOf((String) resultados.getObject(5)));
 	}
-
+	
 	public Producto toProductoAtraccion(ResultSet resultados) throws Exception {
-		return new Atraccion(resultados.getString(1), resultados.getInt(2), resultados.getInt(3),
-				resultados.getDouble(4), TipoDeAtraccion.valueOf((String) resultados.getObject(5)));
+		return new Atraccion(resultados.getString(1), resultados.getInt(2), resultados.getInt(3), resultados.getDouble(4),
+				TipoDeAtraccion.valueOf((String) resultados.getObject(5)));
 	}
-
+	
 	public int findIdByNombreAtraccion(String nombreAtraccion) {
 		try {
 			String sql = "SELECT id_atraccion FROM ATRACCIONES WHERE nombre = ?";

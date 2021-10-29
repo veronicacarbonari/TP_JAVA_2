@@ -24,12 +24,6 @@ public abstract class Promocion extends Producto {
 	public int getCosto() {
 		return costo;
 	}
-	
-	public void setCosto(int costo) {
-		if (costo <= 0)
-			throw new Error("Costo inválido");
-		this.costo = costo;
-	}
 
 	public double getDuracion() {
 		return this.duracion;
@@ -37,7 +31,7 @@ public abstract class Promocion extends Producto {
 
 	
 	public void setDuracion(ArrayList<Atraccion> atrac) {
-		int acumulador = 0;
+		double acumulador = 0;
 		for (int i = 0; i < atrac.size(); i++) {
 			acumulador += atrac.get(i).getDuracion();
 		}
@@ -71,13 +65,5 @@ public abstract class Promocion extends Producto {
 
 	public int getIdTipoProducto(Promocion p) {
 		return 2;
-	}
-	
-	@Override
-	public String toString() {
-		return "Promocion disponible: " + this.getClass().getSimpleName() + "]\n" +  "La promocion incluye estas atracciones: ";
-		//+ " llamada " + this.nombre + "? \nTipo: " + tipo + ". \nCosto: " + costo
-			//	+ " monedas." + "\nDuración: " + duracion + " horas.\n";
-		
 	}
 }
