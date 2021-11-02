@@ -20,6 +20,8 @@ public class SistemaTuristico {
 	AtraccionesDAOImpl AtraccionDao = DAOFactory.getAtraccionesDao();
 	PromocionesDAOImpl PromocionDao = DAOFactory.getPromocionesDao();
 	ItinerarioDAOImpl iDao = DAOFactory.getItinerariosDao();
+	boolean puedeSugerencias = true;
+	boolean puedeNoSugerencias = true;
 
 	public SistemaTuristico(ArrayList<Producto> productos, Usuario usuario) {
 
@@ -33,15 +35,18 @@ public class SistemaTuristico {
 
 	}
 
-	public void iniciar() {
+	public void iniciar() throws Exception {
 		sugerirPreferencias();
 	}
 
-	public void sugerirPreferencias() {
+	public void sugerirPreferencias() throws Exception {
+
 		if (productosPreferidos.size() == 0)
 			sugerirNoPreferencias();
 
 		System.out.println("Hola " + usuario.getNombre() + ", bienvenido al sistema de compra.\n");
+		System.out.println("Tenés \t$" + usuario.getPresupuesto() + " monedas.");
+		System.out.println("Tenés \t" + usuario.getTiempo() + " horas disponibles. \n");
 
 		for (int i = 0; i < productosPreferidos.size(); i++) {
 			if (!productosPreferidos.get(i).estaLleno()
@@ -51,14 +56,26 @@ public class SistemaTuristico {
 				System.out.println("Podemos ofrecerte el siguiente producto: \n");
 				sugerirProducto(productosPreferidos.get(i));
 
+			} else {
+				puedeSugerencias = false;
 			}
 
 			if (i == productosPreferidos.size() - 1)
 				sugerirNoPreferencias();
 		}
+
+		if (!puedeSugerencias && !puedeNoSugerencias) {
+			System.out.println("Ya no tenemos productos para ofrecerte.\n");
+		}
+
+		imprimirItinerario();
+
 	}
 
-	public void sugerirProducto(Producto producto) {
+	public void sugerirProducto(Producto producto) throws Exception {
+		if (!puedeComprar(usuario, producto)) {
+			System.out.println("Ya no podés seguir comprando, tu dinero y/o tiempo restante son insuficientes.\n");
+		}
 		iniciarChat(producto);
 		Scanner sc = new Scanner(System.in);
 		String op;
@@ -72,11 +89,15 @@ public class SistemaTuristico {
 			actualizarDB(producto);
 			producto.agregarVisitantes(1);
 			System.out.println("¡Gracias por tu compra!. El producto será agregado a tu itinerario.");
+
+			System.out.println("Ten quedan \t$" + usuario.getPresupuesto() + " monedas.");
+			System.out.println("Te quedan \t" + usuario.getTiempo() + " horas. \n");
 		}
+
 		System.out.println("\n*********************************************************************");
 	}
 
-	public void sugerirNoPreferencias() {
+	public void sugerirNoPreferencias() throws Exception {
 		if (productosNoPreferidos.size() == 0)
 			System.out.println("No quedan productos");
 
@@ -87,11 +108,18 @@ public class SistemaTuristico {
 					&& !productosNoPreferidos.get(i).estaEn(usuario.getItinerario().getAtraccionesDeItinerario())) {
 				System.out.println("Podemos ofrecerte el siguiente producto: \n");
 				sugerirProducto(productosNoPreferidos.get(i));
-				
+
+			} else {
+				puedeNoSugerencias = false;
 			}
 		}
 
-		imprimirItinerario();
+//		if (!puedeSugerencias && !puedeNoSugerencias) {
+//			System.out.println("Ya no tenemos productos para ofrecerte.\n");
+//
+//			}		
+//		
+//		imprimirItinerario();
 	}
 
 	public void ordenarLista(ArrayList<Producto> productos) {
@@ -123,6 +151,7 @@ public class SistemaTuristico {
 			System.out.println("\tPrecio de la promoción: " + producto.getCosto() + " monedas. \n\tDuración total: "
 					+ producto.getDuracion() + " horas.\n");
 		} else {
+			// System.out.println("Podemos ofrecerte los siguientes productos: \n");
 			System.out.println("¿Desea comprar la atracción " + producto.getNombre() + "?");
 			System.out.println("\tPrecio: " + producto.getCosto() + " monedas. \n\tDuración: " + producto.getDuracion()
 					+ " horas.\n");

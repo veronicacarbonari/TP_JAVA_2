@@ -17,7 +17,7 @@ import dao.UsuariosDAOImpl;
 
 public class App {
 
-	public static void main(String[] args) throws IOException, SQLException {
+	public static void main(String[] args) throws Exception {
 		UsuariosDAOImpl usuarioDao = DAOFactory.getUsuariosDao();
 		AtraccionesDAOImpl AtraccionDao = DAOFactory.getAtraccionesDao();
 		PromocionesDAOImpl PromocionDao = DAOFactory.getPromocionesDao();

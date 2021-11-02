@@ -53,7 +53,7 @@ public abstract class Producto {
 		return this instanceof Promocion;
 	}
 
-	public abstract void agregarVisitantes(int cantidad);
+	public abstract void agregarVisitantes(int cantidad) throws Exception;
 
 	public abstract boolean estaLleno();
 

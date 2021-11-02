@@ -49,11 +49,12 @@ public abstract class Promocion extends Producto {
 	}
 
 	@Override
-	public void agregarVisitantes(int cantidad) {
+	public void agregarVisitantes(int cantidad) throws Exception {
 		for (int i = 0; i < atracciones.size(); i++) {
 			if (cantidad  > atracciones.get(i).getCupo())
-				throw new Error("Demasiados visitantes para el cupo");
-
+				throw new Exception("Demasiados visitantes para el cupo");
+				System.out.println("REVISAR CUANDO SALGA ESTE DATO PARA QUE NO SALGA DUPLICADO!.\n");
+				System.out.println("Ya no quedan lugares.\n");
 			atracciones.get(i).agregarVisitantes(cantidad);
 
 		}
